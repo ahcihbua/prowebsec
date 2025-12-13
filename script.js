@@ -1,6 +1,10 @@
+
+
 // Mobile Navigation Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
+
+
 
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
@@ -26,6 +30,14 @@ if (contactForm) {
         const phone = formData.get('phone');
         const service = formData.get('service');
         const message = formData.get('message');
+
+        emailjs.send('service_yvc032a', 'template_wjk9i4a', {
+            from_name: name,
+            from_email: email,
+            phone: phone,
+            service: service,
+            message: message
+        });
         
         // Basic validation
         if (!name || !email || !message) {
@@ -50,6 +62,7 @@ if (contactForm) {
         // Simulate API call
         setTimeout(() => {
             alert('Thank you for your message! We will get back to you within 24 hours.');
+            
             contactForm.reset();
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
@@ -134,19 +147,28 @@ const observer = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('scroll-in');
         }
     });
 }, observerOptions);
 
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.feature-card, .service-card, .value-card, .team-member, .step');
+    const animatedElements = document.querySelectorAll('.feature-card, .service-card, .value-card, .team-member, .step, .about-text, .about-image, .values h2, .team h2, .process h2, .cta h2, .cta p, .pricing-header, .pricing-card, .maintenance-section, .contact-form-section, .contact-info-section, .contact-item, .social-links, .map-section h2, .map-placeholder');
     
     animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
+        if (!el.classList.contains('scroll-in')) {
+            el.style.opacity = '0';
+            if (el.classList.contains('about-text')) {
+                el.style.transform = 'translateX(-50px)';
+            } else if (el.classList.contains('about-image')) {
+                el.style.transform = 'translateX(50px)';
+            } else {
+                el.style.transform = 'translateY(30px)';
+            }
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        }
     });
 });
 
@@ -213,7 +235,3 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Console message for developers
-console.log('%c🏠 DreamHome Realty', 'color: #2563eb; font-size: 20px; font-weight: bold;');
-console.log('%cWelcome to our website! This is a professional demo site for a real estate business.', 'color: #64748b; font-size: 14px;');
-console.log('%cBuilt with modern web technologies and best practices.', 'color: #10b981; font-size: 12px;');
